@@ -1,5 +1,3 @@
-import logging
-
 from tornado.options import define, options
 from tornado.ioloop import IOLoop
 from app.main import create_app

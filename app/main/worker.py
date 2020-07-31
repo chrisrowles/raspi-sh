@@ -1,4 +1,3 @@
-import logging
 import tornado.websocket
 
 from tornado.ioloop import IOLoop
@@ -38,37 +37,30 @@ class Worker(object):
             self.mode = mode
 
     def on_read(self):
-        logging.debug('worker {} on read'.format(self.id))
         try:
             data = self.channel.recv(BUF_SIZE)
         except (OSError, IOError) as e:
-            logging.error(e)
             if errno_from_exception(e) in _ERRNO_CONNRESET:
                 self.close()
         else:
-            logging.debug('"{}" from {}'.format(data, self.dest_addr))
             if not data:
                 self.close()
                 return
 
-            logging.debug('"{}" to {}'.format(data, self.handler.src_addr))
             try:
                 self.handler.write_message(data)
             except tornado.websocket.WebSocketClosedError:
                 self.close()
 
     def on_write(self):
-        logging.debug('worker {} on write'.format(self.id))
         if not self.data_to_dst:
             return
 
         data = ''.join(self.data_to_dst)
-        logging.debug('"{}" to {}'.format(data, self.dest_addr))
 
         try:
             sent = self.channel.send(data)
         except (OSError, IOError) as e:
-            logging.error(e)
             if errno_from_exception(e) in _ERRNO_CONNRESET:
                 self.close()
             else:
@@ -83,10 +75,8 @@ class Worker(object):
                 self.update_handler(IOLoop.READ)
 
     def close(self):
-        logging.debug('Closing worker {}'.format(self.id))
         if self.handler:
             self.loop.remove_handler(self.fd)
             self.handler.close()
         self.channel.close()
         self.ssh.close()
-        logging.info('Connection to {} lost'.format(self.dest_addr))
