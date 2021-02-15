@@ -4,8 +4,5 @@
 process_name = raspish-%(process_num)s
 command = python /var/www/raspi-sh/manage.py --port=%(process_num)s  --daemon
 stdout_logfile=/home/pi/logs/%(program_name)s-%(process_num)s.log
-# Increase numprocs to run multiple processes on different ports.
-# Note that the chat demo won't actually work in that configuration
-# because it assumes all listeners are in one process.
 numprocs = 1
 numprocs_start = 8000
