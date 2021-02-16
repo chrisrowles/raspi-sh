@@ -1,5 +1,7 @@
 # A web-based SSH client.
 
+![terminal](screencapture-192-168-1-100-8080-terminal-2021-02-16-00_01_10.png)
+
 ## Install
 
 ```sh
