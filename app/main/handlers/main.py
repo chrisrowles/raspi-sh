@@ -5,8 +5,8 @@ import paramiko
 import tornado.websocket
 
 from tornado.ioloop import IOLoop
-from .base_handler import BaseHandler
-from ..worker import Worker
+from app.main.worker import Worker
+from app.main.handlers.base import BaseHandler
 
 DELAY = 3
 workers = {}
@@ -19,7 +19,7 @@ def recycle(worker):
     worker.close()
 
 
-class MainHandler(BaseHandler):
+class HttpHandler(BaseHandler):
     def get_privatekey(self):
         try:
             data = self.request.files.get('privatekey')[0]['body']
@@ -112,7 +112,7 @@ class MainHandler(BaseHandler):
         self.write(dict(id=worker_id, status=status))
 
 
-class WsHandler(tornado.websocket.WebSocketHandler):
+class WebsocketHandler(tornado.websocket.WebSocketHandler):
     def data_received(self, chunk):
         pass
 

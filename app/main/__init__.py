@@ -1,8 +1,8 @@
 import uuid
 import tornado.web
 
-from .worker import Worker
-from .handlers import main_handler
+from app.main.handlers import main
+from app.main.worker import Worker
 
 
 def create_app():
@@ -12,12 +12,12 @@ def create_app():
         'debug': True
     }
 
-    app_handlers = [
-        (r'/',   main_handler.MainHandler),
-        (r'/ws', main_handler.WsHandler)
+    handlers = [
+        (r'/',   main.HttpHandler),
+        (r'/ws', main.WebsocketHandler)
     ]
 
-    app = tornado.web.Application(app_handlers, **settings)
+    app = tornado.web.Application(handlers, **settings)
 
     return app
 
